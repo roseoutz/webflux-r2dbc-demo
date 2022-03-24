@@ -1,0 +1,19 @@
+package com.example.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserResponse implements Serializable {
+
+    private String oid;
+    private String userId;
+    private String username;
+    private String password;
+    private String cellPhone;
+}

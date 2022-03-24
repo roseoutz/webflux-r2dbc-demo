@@ -1,0 +1,56 @@
+buildscript {
+    ext {
+        infobipR2dbcVersion = "6.2.1"
+        queryDslVersion = "5.0.0"
+    }
+}
+
+plugins {
+    id 'org.springframework.boot' version '2.6.4'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+
+configurations {
+
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation ("com.infobip:infobip-spring-data-r2dbc-querydsl-boot-starter:6.2.1") {
+        exclude group: "com.querydsl", module:"querydsl-core"
+        exclude group: "com.querydsl", module:"querydsl-apt"
+    }
+    implementation("com.querydsl:querydsl-core:5.0.0")
+    implementation("com.querydsl:querydsl-apt:5.0.0")
+    annotationProcessor("com.querydsl:querydsl-core:5.0.0")
+    annotationProcessor("com.querydsl:querydsl-apt:5.0.0")
+    annotationProcessor("javax.annotation:javax.annotation-api")
+    annotationProcessor("com.infobip:infobip-spring-data-jdbc-annotation-processor:6.2.1")
+    implementation 'org.modelmapper:modelmapper:3.0.0'
+    implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    implementation 'com.h2database:h2'
+    implementation 'io.r2dbc:r2dbc-h2'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
