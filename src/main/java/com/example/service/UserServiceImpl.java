@@ -37,8 +37,7 @@ public class UserServiceImpl implements UserService{
     public Mono<UserResponse> get(String oid) {
         return userRepository.findById(oid)
                 .switchIfEmpty(Mono.error(new Exception("USER NOT FOUND")))
-                .flatMap(entity -> Mono.just(toDto(entity)))
-                ;
+                .flatMap(entity -> Mono.just(toDto(entity)));
     }
 
     @Override
