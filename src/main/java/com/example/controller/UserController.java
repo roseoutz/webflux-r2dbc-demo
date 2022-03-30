@@ -30,20 +30,22 @@ public class UserController {
     @GetMapping("users/mono")
     public Mono<ResponseEntity<List<UserResponse>>> listMono(
             @RequestParam(name = "page", required = false) String page,
-            @RequestParam(name = "pageSize", required = false) String pageSize
+            @RequestParam(name = "pageSize", required = false) String pageSize,
+            @RequestParam(name = "userId", required = false) String userId
     ) {
         Pageable pageable = PageRequest.of(page == null ? 1 : Integer.parseInt(page), pageSize == null ? 10 : Integer.parseInt(pageSize));
-        return userService.listMono(pageable)
+        return userService.listMono(userId, pageable)
                 .map(ResponseEntity::ok);
     }
 
     @GetMapping("users/flux")
     public Flux<ResponseEntity<UserResponse>> listFlux(
             @RequestParam(name = "page", required = false) String page,
-            @RequestParam(name = "pageSize", required = false) String pageSize
+            @RequestParam(name = "pageSize", required = false) String pageSize,
+            @RequestParam(name = "userId", required = false) String userId
     ) {
         Pageable pageable = PageRequest.of(page == null ? 1 : Integer.parseInt(page), pageSize == null ? 10 : Integer.parseInt(pageSize));
-        return userService.listFlux(pageable)
+        return userService.listFlux(userId, pageable)
                 .map(ResponseEntity::ok);
     }
 

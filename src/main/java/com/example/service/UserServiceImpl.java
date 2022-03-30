@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -41,6 +42,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    @Transactional
     public Mono<UserResponse> add(final UserRequest userRequest) {
         return Mono.just(userRequest)
                 .publishOn(Schedulers.boundedElastic())
@@ -76,6 +78,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    @Transactional
     public Mono<UserResponse> update(final UserRequest userRequest) {
         return Mono.just(userRequest)
                 .filter(dto -> !Objects.isNull(dto.getOid()))
@@ -86,7 +89,7 @@ public class UserServiceImpl implements UserService{
                     if (!userRequest.getCellPhone().equals(entity.getCellPhone())) entity.setCellPhone(userRequest.getCellPhone());
                     if (!userRequest.getUsername().equals(entity.getUsername())) entity.setUsername(userRequest.getUsername());
                     if (!userRequest.getPassword().equals(entity.getPassword())) entity.setPassword(userRequest.getPassword());
-
+                    //return entity;
                     return userRepository.save(entity);
                 })
                 .map(this::toDto)
@@ -99,13 +102,18 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public Mono<List<UserResponse>> listMono(Pageable pageable) {
-        return listFlux(pageable)
+    public Mono<List<UserResponse>> listMono(String userId, Pageable pageable) {
+        return listFlux(userId, pageable)
                 .collectList();
     }
 
     @Override
-    public Flux<UserResponse> listFlux(Pageable pageable) {
+    public Flux<UserResponse> listFlux(String userId, Pageable pageable) {
+        if (!Objects.isNull(userId)) {
+            return userRepository.findByUserId(userId, pageable)
+                    .map(this::toDto)
+                    .onErrorResume(throwable -> Mono.error(new Exception(throwable)));
+        }
         return userRepository.findBy(pageable)
                 .map(this::toDto)
                 .onErrorResume(throwable -> Mono.error(new Exception(throwable)));

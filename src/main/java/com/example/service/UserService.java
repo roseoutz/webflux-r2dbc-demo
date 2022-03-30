@@ -18,8 +18,8 @@ public interface UserService {
 
     Mono<Void> delete(String oid);
 
-    Mono<List<UserResponse>> listMono(Pageable pageable);
+    Mono<List<UserResponse>> listMono(String userId, Pageable pageable);
 
-    Flux<UserResponse> listFlux(Pageable pageable);
+    Flux<UserResponse> listFlux(String userId, Pageable pageable);
 }
 

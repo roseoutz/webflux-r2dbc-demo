@@ -13,4 +13,6 @@ public interface UserRepository extends QuerydslR2dbcRepository<User, String> {
     Mono<User> findByUserId(String userId);
 
     Flux<User> findBy(Pageable pageable);
+
+    Flux<User> findByUserId(String userId, Pageable pageable);
 }

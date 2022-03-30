@@ -1,15 +1,17 @@
 package com.example;
 
-import com.example.entity.Comment;
-import com.example.entity.QUser;
 import com.example.entity.User;
-import com.example.repository.CommentRepository;
 import com.example.repository.UserRepository;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.UUID;
 
@@ -23,8 +25,6 @@ class WebfluxBdsDemoApplicationTests {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    @Autowired
-    private CommentRepository commentRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -33,8 +33,26 @@ class WebfluxBdsDemoApplicationTests {
         return UUID.randomUUID().toString();
     }
 
+    @BeforeEach
+    public void before() {
+
+        for (int i = 0 ; i < 10; i++) {
+            final User userDto = new User();
+            userDto.setOid(getOid());
+            userDto.setUserId("testest" + i);
+            userDto.setUsername("testestest");
+            userDto.setPassword("testestest");
+            userDto.setCellPhone("2020202020");
+            userDto.setIsNew(true);
+
+            userRepository.save(userDto)
+                    .subscribe();
+        }
+    }
+
     @Test
     public void queryDslUserTest() throws InterruptedException {
+/*
 
         final User userDto = new User();
         userDto.setOid(getOid());
@@ -58,40 +76,14 @@ class WebfluxBdsDemoApplicationTests {
                 .doOnNext(dslEntity -> {
                     logger.info(dslEntity.toString());
                 })
-                .subscribe();
+                .subscribe();*/
+        Pageable pageable = PageRequest.of(0, 10);
 
-        Thread.sleep(4000L);
+        userRepository.findByUserId(null, pageable)
+                .doOnNext(entity -> logger.info(entity.toString()))
+                .subscribe();
+        Thread.sleep(10000L);
     }
 
-    @Test
-    public void querydslTest() throws InterruptedException {
-        String oid = getOid();
-        String parentOid = getOid();
-        String rootOid = getOid();
-
-        Comment commentDto = new Comment();
-        commentDto.setOid(oid);
-        commentDto.setDeleted(false);
-        commentDto.setContent("hahahahaha");
-        commentDto.setParentOid(parentOid);
-        commentDto.setRootOid(rootOid);
-        commentDto.setUserId("test");
-        commentDto.setIsNew(true);
-
-        commentRepository.save(commentDto)
-                .flatMap(entity ->
-                    commentRepository.query(sqlQuery -> sqlQuery
-                                .select(comment)
-                                .from(comment)
-                                .where(comment.oid.eq(entity.getOid()))
-                    ).one())
-                .doOnNext(dslEntity -> {
-                    logger.info(dslEntity.toString());
-                })
-                .subscribe();
-
-
-        Thread.sleep(4000L);
-    }
 
 }
