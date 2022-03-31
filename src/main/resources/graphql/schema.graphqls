@@ -1,0 +1,33 @@
+type Query {
+    userGet(oid: String): UserResponse
+    userListMono(userSearch: UserSearch): [UserResponse]
+    userListFlux(userSearch: UserSearch): UserResponse
+}
+
+type Mutation {
+    userAdd(userRequest: UserRequest): UserResponse
+    userUpdate(userRequest: UserRequest): UserResponse
+}
+
+input UserRequest {
+    oid: String
+    userId: String
+    username: String
+    password: String
+    cellPhone: String
+}
+
+input UserSearch {
+    oid: String
+    userId: String
+    page: Int
+    pageSize: Int
+}
+
+type UserResponse {
+    oid: String
+    userId: String
+    username: String
+    password: String
+    cellPhone: String
+}

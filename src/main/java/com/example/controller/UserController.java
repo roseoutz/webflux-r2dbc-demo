@@ -5,6 +5,7 @@ import com.example.dto.UserResponse;
 import com.example.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +16,11 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 @Slf4j
-@RequiredArgsConstructor
 @RestController("/api/v1/user/")
 public class UserController {
 
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
     @GetMapping("user/{oid}")
     public Mono<ResponseEntity<UserResponse>> get(@PathVariable(name = "oid", required = false) String oid) {

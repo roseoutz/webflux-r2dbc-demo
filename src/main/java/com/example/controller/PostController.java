@@ -8,6 +8,7 @@ import com.example.service.PostService;
 import com.example.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -18,11 +19,12 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 @Slf4j
-@RequiredArgsConstructor
+// @RequiredArgsConstructor
 @RestController("/api/v1/post/")
 public class PostController {
 
-    private final PostService postService;
+    @Autowired
+    private PostService postService;
 
     @GetMapping("post/{oid}")
     public Mono<ResponseEntity<PostResponse>> get(@PathVariable(name = "oid", required = false) String oid) {

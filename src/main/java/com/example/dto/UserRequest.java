@@ -2,12 +2,8 @@ package com.example.dto;
 
 import lombok.*;
 
-import java.io.Serializable;
-
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class UserRequest implements Serializable {
+public class UserRequest {
 
     private String oid;
     private String userId;

@@ -4,9 +4,9 @@ import com.example.dto.UserRequest;
 import com.example.dto.UserResponse;
 import com.example.entity.User;
 import com.example.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,11 +20,12 @@ import java.util.UUID;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
 
-    private final UserRepository userRepository;
-    private final ModelMapper modelMapper;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private ModelMapper modelMapper;
 
     protected User toEntity(UserRequest userRequest) {
         return modelMapper.map(userRequest, User.class);

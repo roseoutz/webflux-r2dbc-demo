@@ -1,7 +1,5 @@
 package com.example.entity;
 
-import com.querydsl.core.annotations.PropertyType;
-import com.querydsl.core.annotations.QueryType;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -12,7 +10,7 @@ import org.springframework.data.relational.core.mapping.Table;
 
 @RequiredArgsConstructor
 @Data
-@Table("user")
+@Table("cm_user")
 public class User implements Persistable<String> {
 
     @Id
@@ -32,7 +30,6 @@ public class User implements Persistable<String> {
         return oid;
     }
 
-    @QueryType(PropertyType.NONE)
     @Transient
     private boolean isNew = false;
 
