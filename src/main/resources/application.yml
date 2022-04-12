@@ -1,0 +1,10 @@
+
+spring:
+  application:
+    # Spring Cloud Gateway ?? ??
+    name: WEBFLUX-BDS-DEMO
+  profiles:
+    active: test
+
+server:
+  port: 8080

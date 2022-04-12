@@ -1,0 +1,22 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+  graphql:
+    schema:
+      locations: graphql/**
+      printer:
+        enabled: true
+    path: /graphql
+    graphiql:
+      enabled: true
+      path: /gpiq
+  r2dbc:
+    url: r2dbc:h2:mem:///demo;DB_CLOSE_DELAY=1;DATABASE_TO_UPPER=false
+    username: sa
+    password:
+
+logging:
+  level:
+    org:
+      springframework: DEBUG

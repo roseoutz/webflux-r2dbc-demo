@@ -1,6 +1,8 @@
 plugins {
     id 'org.springframework.boot' version '2.7.0-M3'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'com.palantir.docker' version "0.33.0"
+    id 'com.palantir.docker-run' version "0.33.0"
     id 'java'
 }
 
@@ -8,6 +10,26 @@ group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
+docker {
+    println("gradle docker-plugin start = spring-example:${project.version}")
+    name "spring-example:${project.version}"
+    files tasks.bootJar.outputs.files
+    tag 'DockerHub', 'roseoutz/spring-example:${project.version}'
+    noCache true
+    buildArgs([
+            'JAR_FILE': tasks.bootJar.outputs.files.singleFile.name
+    ])
+}
+
+dockerRun {
+    name "spring-example"
+    image "spring-example:${project.version}"
+    ports '8090:8080','5005:5005'
+    env 'ACTIVE_PROFILE': 'test', "JVM_OPTIONS": '-Xdebug -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005'
+    clean true
+}
+
+tasks.dockerRun.dependsOn(tasks.docker)
 
 configurations {
 
